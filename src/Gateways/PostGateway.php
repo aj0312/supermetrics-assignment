@@ -13,7 +13,7 @@ class PostGateway {
         $this->data = null;
     }
 
-    private function getPosts() {
+    public function getPosts() {
         $response = $this->callAPI('GET', 'posts', $this->requestData);
         $result = json_decode($response, true);
         if (isset($result['error']) && !empty($result['error'])) {
