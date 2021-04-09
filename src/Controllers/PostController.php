@@ -27,7 +27,7 @@ class PostController
         switch ($this->requestMethod) {
             case 'get-average-character-length':
                 $postGateway = new PostGateway($this->request);
-                $response = $postGateway->getPosts();
+                $response = $postGateway->getAvgCharLengthOfPost();
                 break;
             default:
                 //
