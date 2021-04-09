@@ -6,6 +6,7 @@ use DateTime;
 
 trait CommonMethodsTrait {
 
+    use ValidationTrait;
     public function getAverage($sum, $size): float {
         return ceil($sum / $size) ;
     }
@@ -15,19 +16,19 @@ trait CommonMethodsTrait {
             return null;
         
         $format = 'Y-m-d\TH:i:sP';
-        $userPostsByMonthAndYear = array();
+        $postsByMonthAndYear = [];
         foreach ($userPosts as $post) {
             $date = null;
             $date = DateTime::createFromFormat($format, $post['created_time']);
             $month = $date->format('M');
             $year = $date->format('Y');
-            $userPostsByMonthAndYear[$year][$month][] = $post;
+            $postsByMonthAndYear[$year][$month][] = $post;
         }
 
-        return $userPostsByMonthAndYear;
+        return $postsByMonthAndYear;
     }
 
-    public function setTotalCharCountOfPostsPerMonth ($postsPerMonth = null): array | null {
+    private function setTotalCharCountOfPostsPerMonth ($postsPerMonth = null): array | null {
         if ($postsPerMonth === null) {
             return null;
         }
@@ -43,10 +44,12 @@ trait CommonMethodsTrait {
         return $postsPerMonth;
     }
 
-    public function getLongestPostPerMonth(array $postsPerMonth = null): array | null {
-        if ($postsPerMonth === null) {
+    public function getLongestPostPerMonth(array $posts = null): array | null {
+        if (!$this->isArrayValid($posts)) {
              return null;
         }
+        $postsPerMonth = $this->getPostsByMonth($posts);
+        $postsPerMonth = $this->setTotalCharCountOfPostsPerMonth($postsPerMonth);
 
         $longestPostInMonth = [];
         foreach($postsPerMonth as $year => $postsInYear) {
@@ -89,10 +92,12 @@ trait CommonMethodsTrait {
         return $this->getAverage($sumOfCharactersOfPosts['char_length'], count($data));
     }
 
-    public function getAverageCharsOfPostsPerMonth($postsPerMonth = null): array | null {
-        if ($postsPerMonth === null) {
+    public function getAverageCharLengthOfPostsPerMonth($posts = null): array | null {
+        if (!$this->isArrayValid($posts)) {
             return null;
         }
+        $postsPerMonth = $this->getPostsByMonth($posts);
+        $postsPerMonth = $this->setTotalCharCountOfPostsPerMonth($postsPerMonth);
 
         $averageCountPerMonth = [];
         foreach ($postsPerMonth as $year => $postsForYear) {
@@ -104,21 +109,39 @@ trait CommonMethodsTrait {
         return $averageCountPerMonth;
     }
 
-    public function getPostsByWeek($userPosts = null): array | null {
-        if ($userPosts === null)
+    public function getPostsByWeek($posts = null): array | null {
+        if (!$this->isArrayValid($posts)) {
             return null;
+        }
         
         $format = 'Y-m-d\TH:i:sP';
         $userPostsByWeekAndYear = array();
-        foreach ($userPosts as $post) {
+        foreach ($posts as $post) {
             $date = null;
             $date = DateTime::createFromFormat($format, $post['created_time']);
             $weekNo = $date->format('W');
             $year = $date->format('Y');
-            $userPostsByWeekAndYear['weekData'][$year][$weekNo][] = $post;
+            $userPostsByWeekAndYear[$year][$weekNo][] = $post;
         }
 
         return $userPostsByWeekAndYear;
+    }
+
+    public function getTotalPostsByWeek($posts = null): array | null {
+        if (!$this->isArrayValid($posts)) {
+            return null;
+        }
+
+        $postsPerWeekInYear = $this->getPostsByWeek($posts);
+
+        $totalPostsPerWeek = [];
+        foreach ($postsPerWeekInYear as $year => $postsPerWeek) {
+            foreach ($postsPerWeek as $week => $posts) {
+                $totalPostsPerWeek[$year][$week] = count($posts);
+            }
+        }
+
+        return $totalPostsPerWeek;
     }
 
     public function getPostsOfUser($data = null): array | null {

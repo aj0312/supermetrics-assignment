@@ -43,7 +43,7 @@ trait APITrait {
 
     
 
-    public function invalidTokenResponse($message)
+    public function invalidResponse($message)
     {
         $response['status_code_header'] = 'HTTP/1.1 422 ' . $message;
         $response['body'] = json_encode([
@@ -56,6 +56,13 @@ trait APITrait {
     {
         $response['status_code_header'] = 'HTTP/1.1 404 Not Found';
         $response['body'] = null;
+        return $response;
+    }
+
+    public function validResponse($body)
+    {
+        $response['status_code_header'] = 'HTTP/1.1 200 Success';
+        $response['body'] = $body;
         return $response;
     }
 }

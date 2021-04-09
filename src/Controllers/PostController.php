@@ -34,8 +34,11 @@ class PostController
                 break;
         }
         header($response['status_code_header']);
+        if ($response['error']) {
+            echo $response['error'];
+        }
         if ($response['body']) {
-            echo $response['body'];
+            echo json_encode($response['body']);
         }
     }
 

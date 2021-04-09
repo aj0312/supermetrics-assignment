@@ -3,42 +3,69 @@ namespace Src\Gateways;
 
 use Src\Common\APITrait;
 use Src\Common\Utilities\CommonMethodsTrait;
+use Src\Service\PostService;
 
 class PostGateway {
-
-
-    use APITrait;
+    
     use CommonMethodsTrait;
+    use APITrait;
 
-    public function __construct($requestData)
-    {
-        $this->requestData = $requestData;
-        $this->data = null;
+    public function __construct(PostService $postService) {
+        $this->requestData = $_REQUEST;
+        $this->postService = $postService;
     }
 
-    private function getPosts() {
-        $response = $this->callAPI('GET', 'posts', $this->requestData);
-        return json_decode($response, true);
-    }
-
-    public function getAvgCharLengthOfPost() {
-        $result = $this->getPosts();
-        $postsByMonth = $this->getPostsByMonth($result['data']['posts']);
-        $data = $this->setTotalCharCountOfPostsPerMonth($postsByMonth);
-        $longestPostPerMonth = $this->getLongestPostPerMonth($data);
-        $dataPerWeek = $this->getPostsByWeek($result['data']['posts']);
-
-        $averagePostsPerMonth = $this->getAverageCharsOfPostsPerMonth($data);
-        $postsPerUserPerMonth = $this->getPostsByUserPerMonth($result['data']['posts']);
-        $avgPostsPerUserPerMonth = $this->getAveragePostsByUserPerMonth($result['data']['posts']);
-        echo "<pre>";
-        // print_r($data);
-        print_r($avgPostsPerUserPerMonth);
-        die;
-
-        if (isset($result['error']) && !empty($result['error'])) {
-            return $this->invalidTokenResponse($result['error']);
+    public function getAvgCharLengthOfPost(): array {
+        $this->data = $this->postService->getPosts($this->requestData);
+        if (!$this->data['status']) {
+            $response = $this->invalidResponse($this->data['error']);
+            return $response;
         }
+        $result = $this->data;
+        $averageCharLengthPostsPerMonth = $this->getAverageCharLengthOfPostsPerMonth($result['data']['posts']);
+
+        $response = $this->validResponse($averageCharLengthPostsPerMonth);
+        return $response;
+    }
+
+    public function getLongestPostByCharPerMonth(): array {
+        $this->data = $this->postService->getPosts($this->requestData);
+        if (!$this->data['status']) {
+            $response = $this->invalidResponse($this->data['error']);
+            return $response;
+        }
+        $result = $this->data;
+        $longestPostPerMonth = $this->getLongestPostPerMonth($result['data']['posts']);
+        $response = $this->validResponse($longestPostPerMonth);
+        return $response;
+    }
+
+    public function getTotalPostsByWeek(): array {
+        $this->data = $this->postService->getPosts($this->requestData);
+        if (!$this->data['status']) {
+            $response = $this->invalidResponse($this->data['error']);
+            return $response;
+        }
+        $result = $this->data;
+        
+        $totalPostsPerWeek = $this->getTotalPostsByWeek($result['data']['posts']);
+        $response = $this->validResponse($totalPostsPerWeek);
+
+        return $response;
+    }
+
+    public function getAveragePostsPerUserPerMonth(): array {
+        $this->data = $this->postService->getPosts($this->requestData);
+        if (!$this->data['status']) {
+            $response = $this->invalidResponse($this->data['error']);
+            return $response;
+        }
+        $result = $this->data;
+
+        $totalPostsPerWeek = $this->getAveragePostsByUserPerMonth($result['data']['posts']);
+        $response = $this->validResponse($totalPostsPerWeek);
+        
+        return $response;
     }
 
 }
