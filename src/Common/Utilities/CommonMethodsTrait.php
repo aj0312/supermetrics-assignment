@@ -60,8 +60,8 @@ trait CommonMethodsTrait {
         return $longestPostInMonth;
     }
     
-    public function getLongestPost($data = null): array | null {
-        if ($data === null) {
+    private function getLongestPost($data = null): array | null {
+        if (!$this->isArrayValid($data)) {
             return null;
         }
         $longestPost = array_reduce($data, function ($carry, $item) {
@@ -75,8 +75,8 @@ trait CommonMethodsTrait {
         return $longestPost;
     }
 
-    public function getAverageLength($data = null): float | null {
-        if ($data === null) {
+    private function getAverageLength($data = null): float | null {
+        if (!$this->isArrayValid($data)) {
             return null;
         }
 
@@ -144,23 +144,23 @@ trait CommonMethodsTrait {
         return $totalPostsPerWeek;
     }
 
-    public function getPostsOfUser($data = null): array | null {
-        if ($data === null) {
+    public function getPostsOfUser($posts = null): array | null {
+        if (!$this->isArrayValid($posts)) {
             return null;
         }
 
         $postsOfUser = [];
-        foreach ($data as $post) {
+        foreach ($posts as $post) {
             $postsOfUser[$post['from_id']][] = $post;
         }
         return $postsOfUser;
     }
 
-    public function getPostsByUserPerMonth($data = null): array | null {
-        if ($data === null) {
+    public function getPostsByUserPerMonth($posts = null): array | null {
+        if (!$this->isArrayValid($posts)) {
             return null;
         }
-        $postsByMonth = $this->getPostsByMonth($data);
+        $postsByMonth = $this->getPostsByMonth($posts);
         $postsPerUserPerMonth = [];
         foreach ($postsByMonth as $year => $postsInYear) {
             foreach ($postsInYear as $month => $postsInMonth) {
@@ -171,12 +171,12 @@ trait CommonMethodsTrait {
         return $postsPerUserPerMonth;
     }
 
-    public function getAveragePostsByUserPerMonth($totalPosts = null): array | null {
-        if ($totalPosts === null) {
+    public function getAveragePostsByUserPerMonth($posts = null): array | null {
+        if (!$this->isArrayValid($posts)) {
             return null;
         }
         
-        $postsPerUser = $this->getPostsOfUser($totalPosts);
+        $postsPerUser = $this->getPostsOfUser($posts);
         $postsPerUserPerMonth = $postsPerUser;
         foreach ($postsPerUser as $from_id => $posts) {
             $postsPerUserPerMonth[$from_id] = $this->getPostsByMonth($posts);
