@@ -37,7 +37,7 @@
         - body:
             - type: object
             - description: which contains data
-
+        ```
             data:
                 type: Map
                 description:
@@ -53,7 +53,56 @@
                             Value:
                                 type: int
                                 description: Average of posts length per month
-    
+        ```
+    * Response Example: 
+        ```javascript
+        {
+            "status_code_header": "HTTP/1.1 200 Success",
+            "body": {
+                "data": {
+                    "2021": {
+                        "Mar": 391
+                    }
+                }
+            }
+        }
+        ```
+
+2. **Longest post by character length per month**
+    * Method name - get-longest-post-per-month
+    * Description - Returns Longest post by character per month
+    * Type - GET
+    * Request Structure -
+        - sl_token: 
+            - type: string
+            - description: sl_token provided by supermetrics register API
+        - page: 
+            - type: int
+            - description: page number of which data needs to be fetched
+    * Response Structure -
+        - status_code_header: 
+            - type: string
+            - description: HTTP Response header with custom message
+        - body:
+            - type: object
+            - description: which contains data
+        ```
+            data:
+                type: Map
+                description:
+                    Key:
+                        type: string
+                        description: Year
+                    Value:
+                        type: Map
+                        description:
+                            Key:
+                                type: string
+                                description: Month
+                            Value:
+                                type: object
+                                description: post object with character length of the post
+        ```
     * Response Example: 
         ```javascript
         {
