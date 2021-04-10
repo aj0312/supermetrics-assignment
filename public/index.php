@@ -12,8 +12,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
 
-// all of our endpoints start with /person
-// everything else results in a 404 Not Found
 if ($uri[1] !== 'api') {
     header("HTTP/1.1 404 Not Found");
     exit();
@@ -26,7 +24,6 @@ if (!isset($uri[2])) {
 $requestMethodType = $_SERVER["REQUEST_METHOD"];
 $requestMethod = $uri[2];
 
-// pass the request method and user ID to the PersonController and process the HTTP request:
 $controller = new PostController($requestMethod, $requestMethodType);
 $controller->processRequest();
 

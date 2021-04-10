@@ -63,4 +63,11 @@ trait APITrait {
         $response['body'] = ['data' => $body];
         return $response;
     }
+
+    public function invalidMethodResponse()
+    {
+        $response['status_code_header'] = 'HTTP/1.1 400 Invalid Request Method Type';
+        $response['error'] = ['error' => 'Invalid Request Method Type'];
+        return $response;
+    }
 }

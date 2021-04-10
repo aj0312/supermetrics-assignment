@@ -43,16 +43,17 @@ class PostController
                 $response = $postGateway->getAveragePostsPerUserPerMonth();
                 break;
             default:
-                //
+                $postGateway = new PostGateway();
+                $response = $postGateway->getDefaultMethodResponse();
                 break;
         }
         header($response['status_code_header']);
         if (isset($response['error']) && !empty($response['error'])) {
-            echo json_encode($response['error']);
+            echo json_encode($response);
             return;
         }
         if ($response['body']) {
-            echo json_encode($response['body']);
+            echo json_encode($response);
             return;
         }
     }

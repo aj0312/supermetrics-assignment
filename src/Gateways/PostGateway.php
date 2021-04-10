@@ -10,10 +10,11 @@ class PostGateway {
     use CommonMethodsTrait;
     use APITrait;
 
-    public function __construct(PostService $postService) {
+    public function __construct(?PostService $postService = null) {
         $this->requestData = $_REQUEST;
         $this->postService = $postService;
     }
+
 
     public function getAvgCharLengthOfPostPerMonth(): array {
         $this->data = $this->postService->getPosts($this->requestData);
@@ -66,6 +67,10 @@ class PostGateway {
         $response = $this->validResponse($totalPostsPerWeek);
         
         return $response;
+    }
+
+    public function getDefaultMethodResponse(): array {
+        return $this->invalidMethodResponse();
     }
 
 }
