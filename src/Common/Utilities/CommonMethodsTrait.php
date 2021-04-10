@@ -198,12 +198,10 @@ trait CommonMethodsTrait {
 
     }
 
-    private function getCountOfMonths($posts = null): int | null {
-        if (!$this->isArrayValid($posts)) {
+    private function getCountOfMonths($postsByYearAndMonth = null): int | null {
+        if (!$this->isArrayValid($postsByYearAndMonth)) {
             return null;
         }
-
-        $postsByYearAndMonth = $this->getPostsByMonth($posts);
 
         $countOfMonths = 0;
         foreach ($postsByYearAndMonth as $postsByMonthInYear) {
