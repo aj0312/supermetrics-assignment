@@ -20,17 +20,17 @@ Eg. http://127.0.0.1:8000/api/get-average-posts-per-user-per-month
 APIs
 
 1. Get Average character length of posts per month
-    Method name - get-average-length-of-post-per-month
-    Description - Returns Average Length of posts per month
-    Type - GET
-    Request Structure -
+    1.1 Method name - get-average-length-of-post-per-month
+    1.2 Description - Returns Average Length of posts per month
+    1.3 Type - GET
+    1.4 Request Structure -
         sl_token: 
             type: string
             description: sl_token provided by supermetrics register API
         page: 
             type: int
             description: page number of which data needs to be fetched
-    Response Structure -
+    1.5 Response Structure -
         status_code_header: 
             type: string
             description: HTTP Response header with custom message
@@ -54,7 +54,7 @@ APIs
                                 type: int
                                 description: Average of posts length per month
     
-    Response Example: 
+    1.6 Response Example: 
         {
             "status_code_header": "HTTP/1.1 200 Success",
             "body": {
