@@ -176,3 +176,61 @@
             }
         }
         ```
+
+4. **Average number of posts per user per month**
+    * Method name - get-average-posts-per-user-per-month
+    * Description - Returns average posts per user per month
+    * Type - GET
+    * Request Structure -
+        - sl_token: 
+            - type: string
+            - description: sl_token provided by supermetrics register API
+        - page: 
+            - type: int
+            - description: page number of which data needs to be fetched
+    * Response Structure -
+        - status_code_header: 
+            - type: string
+            - description: HTTP Response header with custom message
+        - body:
+            - type: object
+            - description: which contains data
+        ```
+            data:
+                type: Map
+                description:
+                    Key:
+                        type: string
+                        description: from_id/user id
+                    Value:
+                        type: Map
+                        description:
+                            Key:
+                                type: string
+                                description: Year
+                            Value:
+                                type: Map
+                                description:
+                                    Key:
+                                        type: string
+                                        description: Month
+                                    Value:
+                                        type: float
+                                        description: Average count of post in month for user
+        ```
+    * Response Example: 
+        ```javascript
+        {
+            "status_code_header": "HTTP/1.1 200 Success",
+            "body": {
+                "data": {
+                    "user_19": {
+                        "2021": {
+                            "Feb": 0.5,
+                            "Jan": 0.5
+                        }
+                    }
+                }
+            }
+        }
+        ```
