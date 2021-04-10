@@ -8,7 +8,7 @@ trait CommonMethodsTrait {
 
     use ValidationsTrait;
     public function getAverage($sum, $size): float {
-        return ceil($sum / $size) ;
+        return round(($sum / $size), 2) ;
     }
 
     public function getPostsByMonth($userPosts = null): array | null {
@@ -75,8 +75,8 @@ trait CommonMethodsTrait {
         return $longestPost;
     }
 
-    private function getAverageLength($data = null): float | null {
-        if (!$this->isArrayValid($data)) {
+    private function getAverageLengthOfCharacters($data = null, int $count): float | null {
+        if (!$this->isArrayValid($data) || !$this->isVariableValid($count) || $count === 0) {
             return null;
         }
 
@@ -89,7 +89,7 @@ trait CommonMethodsTrait {
             return $carry;
         });
 
-        return $this->getAverage($sumOfCharactersOfPosts['char_length'], count($data));
+        return $this->getAverage($sumOfCharactersOfPosts['char_length'], $count);
     }
 
     public function getAverageCharLengthOfPostsPerMonth($posts = null): array | null {
@@ -100,9 +100,10 @@ trait CommonMethodsTrait {
         $postsPerMonth = $this->setTotalCharCountOfPostsPerMonth($postsPerMonth);
 
         $averageCountPerMonth = [];
+        $countOfMonths = $this->getCountOfMonths($postsPerMonth);
         foreach ($postsPerMonth as $year => $postsForYear) {
             foreach ($postsForYear as $month => $postsInMonth) {
-                $averageCountPerMonth[$year][$month] = $this->getAverageLength($postsInMonth);
+                $averageCountPerMonth[$year][$month] = $this->getAverageLengthOfCharacters($postsInMonth, $countOfMonths);
             }
         }
 
@@ -183,9 +184,8 @@ trait CommonMethodsTrait {
         }
         $averagePostsPerUserPerMonth = [];
         foreach ($postsPerUserPerMonth as $from_id => $postsPerUser) {
-            $totalMonthsForUser = 0;
+            $totalMonthsForUser = $this->getCountOfMonths($postsPerUser);
             foreach ($postsPerUser as $year => $postsPerYear) {
-                $totalMonthsForUser += count($postsPerYear);
                 foreach ($postsPerYear as $month => $postsPerMonth) {
                     $totalPostsPerMonth = count($postsPerMonth);
                     $averagePostsPerUserPerMonth[$from_id][$year][$month] = $this->getAverage($totalPostsPerMonth, $totalMonthsForUser);
@@ -196,6 +196,21 @@ trait CommonMethodsTrait {
         return $averagePostsPerUserPerMonth;
 
 
+    }
+
+    private function getCountOfMonths($posts = null): int | null {
+        if (!$this->isArrayValid($posts)) {
+            return null;
+        }
+
+        $postsByYearAndMonth = $this->getPostsByMonth($posts);
+
+        $countOfMonths = 0;
+        foreach ($postsByYearAndMonth as $postsByMonthInYear) {
+            $countOfMonths += count($postsByMonthInYear);
+        }
+
+        return $countOfMonths;
     }
 
 
