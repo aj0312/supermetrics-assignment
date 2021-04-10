@@ -46,9 +46,7 @@ trait APITrait {
     public function invalidResponse($message)
     {
         $response['status_code_header'] = 'HTTP/1.1 422 ' . $message;
-        $response['body'] = json_encode([
-            'error' => $message
-        ]);
+        $response['error'] = ['error' => $message];
         return $response;
     }
 
@@ -62,7 +60,7 @@ trait APITrait {
     public function validResponse($body)
     {
         $response['status_code_header'] = 'HTTP/1.1 200 Success';
-        $response['body'] = $body;
+        $response['body'] = ['data' => $body];
         return $response;
     }
 }

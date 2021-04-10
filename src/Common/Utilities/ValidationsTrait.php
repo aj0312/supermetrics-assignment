@@ -2,7 +2,7 @@
 
 namespace Src\Common\Utilities;
 
-trait ValidationTrait {
+trait ValidationsTrait {
 
     public function isVariableValid(mixed $var = null): bool {
         return (isset($var) && $var !== null);

@@ -4,13 +4,13 @@ namespace Src\Service;
 
 
 use Src\Common\APITrait;
-use Src\Common\Utilities\ValidationTrait;
+use Src\Common\Utilities\ValidationsTrait;
 
 class PostService {
 
 
     use APITrait;
-    use ValidationTrait;
+    use ValidationsTrait;
 
     private $data;    
     private static $instance = NULL;
@@ -40,12 +40,13 @@ class PostService {
             return $response;
         }
         $result = $this->callAPI('GET', 'posts', $requestData);
-        if ($this->isVariableValid($result['error'])) {
+        $result = json_decode($result, true);
+        if (isset($result['error']) && $this->isVariableValid($result['error']['message'])) {
             $response['status'] = false;
-            $response['error'] = $result['error'];
+            $response['error'] = $result['error']['message'];
             return $response;
         }
-        $response['data'] = json_decode($result, true);
+        $response['data'] = $result;
         $response['data'] = $response['data']['data'];
         $this->data['posts'] = $response['data']['posts'];
         $this->data['page'] = $response['data']['page'];

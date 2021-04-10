@@ -15,7 +15,7 @@ class PostGateway {
         $this->postService = $postService;
     }
 
-    public function getAvgCharLengthOfPost(): array {
+    public function getAvgCharLengthOfPostPerMonth(): array {
         $this->data = $this->postService->getPosts($this->requestData);
         if (!$this->data['status']) {
             $response = $this->invalidResponse($this->data['error']);
@@ -40,7 +40,7 @@ class PostGateway {
         return $response;
     }
 
-    public function getTotalPostsByWeek(): array {
+    public function getTotalPostsPerWeek(): array {
         $this->data = $this->postService->getPosts($this->requestData);
         if (!$this->data['status']) {
             $response = $this->invalidResponse($this->data['error']);

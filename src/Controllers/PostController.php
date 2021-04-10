@@ -3,6 +3,7 @@
 namespace Src\Controllers;
 
 use Src\Gateways\PostGateway;
+use Src\Service\PostService;
 
 class PostController
 {
@@ -25,21 +26,34 @@ class PostController
     public function processRequest()
     {
         switch ($this->requestMethod) {
-            case 'get-average-character-length':
-                $postGateway = new PostGateway($this->request);
-                $response = $postGateway->getAvgCharLengthOfPost();
+            case 'get-average-length-of-post-per-month':
+                $postGateway = new PostGateway(PostService::getInstance());
+                $response = $postGateway->getAvgCharLengthOfPostPerMonth();
+                break;
+            case 'get-longest-post-per-month':
+                $postGateway = new PostGateway(PostService::getInstance());
+                $response = $postGateway->getLongestPostByCharPerMonth();
+                break;
+            case 'get-total-posts-per-week':
+                $postGateway = new PostGateway(PostService::getInstance());
+                $response = $postGateway->getTotalPostsPerWeek();
+                break;
+            case 'get-average-posts-per-user-per-month':
+                $postGateway = new PostGateway(PostService::getInstance());
+                $response = $postGateway->getAveragePostsPerUserPerMonth();
                 break;
             default:
                 //
                 break;
         }
         header($response['status_code_header']);
-        if ($response['error']) {
-            echo $response['error'];
+        if (isset($response['error']) && !empty($response['error'])) {
+            echo json_encode($response['error']);
+            return;
         }
         if ($response['body']) {
             echo json_encode($response['body']);
+            return;
         }
     }
-
 }

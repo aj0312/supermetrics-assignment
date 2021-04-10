@@ -6,7 +6,7 @@ use DateTime;
 
 trait CommonMethodsTrait {
 
-    use ValidationTrait;
+    use ValidationsTrait;
     public function getAverage($sum, $size): float {
         return ceil($sum / $size) ;
     }
@@ -178,18 +178,17 @@ trait CommonMethodsTrait {
         
         $postsPerUser = $this->getPostsOfUser($totalPosts);
         $postsPerUserPerMonth = $postsPerUser;
-        $totalPostsPerUser = [];
         foreach ($postsPerUser as $from_id => $posts) {
-            $totalPostsPerUser[$from_id] = count($posts);
             $postsPerUserPerMonth[$from_id] = $this->getPostsByMonth($posts);
         }
         $averagePostsPerUserPerMonth = [];
-
         foreach ($postsPerUserPerMonth as $from_id => $postsPerUser) {
+            $totalMonthsForUser = 0;
             foreach ($postsPerUser as $year => $postsPerYear) {
+                $totalMonthsForUser += count($postsPerYear);
                 foreach ($postsPerYear as $month => $postsPerMonth) {
                     $totalPostsPerMonth = count($postsPerMonth);
-                    $averagePostsPerUserPerMonth[$from_id][$year][$month] = $this->getAverage($totalPostsPerMonth, $totalPostsPerUser[$from_id]);
+                    $averagePostsPerUserPerMonth[$from_id][$year][$month] = $this->getAverage($totalPostsPerMonth, $totalMonthsForUser);
                 }
             }
         }
