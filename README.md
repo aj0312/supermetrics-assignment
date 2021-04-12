@@ -6,11 +6,21 @@
 1. php 7.x or above
 2. composer
 
+**Libraries used**
+1. vlucas/phpdotenv
+    * Purpose - to fetch data from .env file
+2. psr-4
+    * Purpose - to avoid include and require statements in code and instead autoload files
+
 **Installation**
 1. Run composer install
 
 **Running Project**
 1. Run php -S 127.0.0.1:8000 -t public
+2. Get sl_token from Supermetrics register API
+3. Apply the sl_token received while hitting any API to the parameter
+
+**Note: if you get invalid sl_token message from an API, then re-register**
 
 **Structure while hitting API**
 1. http://{domain_name}:{port_no}/api/{api-name}
