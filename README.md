@@ -1,4 +1,4 @@
-### Please Read this to know API endpoints
+### This document covers - Steps to run, APIs and their signatures
 
 #### Steps To Install and Run
 
@@ -13,7 +13,7 @@
     * Purpose - to avoid include and require statements in code and instead autoload files
 
 **Installation**
-1. Run composer install
+1. Run ``composer install``
 
 **Running Project**
 1. Run php -S 127.0.0.1:8000 -t public
