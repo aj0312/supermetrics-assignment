@@ -19,8 +19,7 @@ class PostGateway {
     public function getAvgCharLengthOfPostPerMonth(): array {
         $this->data = $this->postService->getPosts($this->requestData);
         if (!$this->data['status']) {
-            $response = $this->invalidResponse($this->data['error']);
-            return $response;
+            return $this->invalidResponse($this->data['error']);
         }
         $result = $this->data;
         $averageCharLengthPostsPerMonth = $this->getAverageCharLengthOfPostsPerMonth($result['data']['posts']);
@@ -32,8 +31,7 @@ class PostGateway {
     public function getLongestPostByCharPerMonth(): array {
         $this->data = $this->postService->getPosts($this->requestData);
         if (!$this->data['status']) {
-            $response = $this->invalidResponse($this->data['error']);
-            return $response;
+            return $this->invalidResponse($this->data['error']);
         }
         $result = $this->data;
         $longestPostPerMonth = $this->getLongestPostPerMonth($result['data']['posts']);
@@ -44,8 +42,7 @@ class PostGateway {
     public function getTotalPostsPerWeek(): array {
         $this->data = $this->postService->getPosts($this->requestData);
         if (!$this->data['status']) {
-            $response = $this->invalidResponse($this->data['error']);
-            return $response;
+            return $this->invalidResponse($this->data['error']);
         }
         $result = $this->data;
         
@@ -58,8 +55,7 @@ class PostGateway {
     public function getAveragePostsPerUserPerMonth(): array {
         $this->data = $this->postService->getPosts($this->requestData);
         if (!$this->data['status']) {
-            $response = $this->invalidResponse($this->data['error']);
-            return $response;
+            return $this->invalidResponse($this->data['error']);
         }
         $result = $this->data;
 

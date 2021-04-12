@@ -35,19 +35,21 @@ class PostService {
             $requestData['page'] = 1;
         }
         $response['status'] = true;
+
         if ($this->isArrayValid($this->data) && $this->data['page'] === $requestData['page']) {
             $response['data'] = json_decode($this->data, true);
             return $response;
         }
-        $result = $this->callAPI('GET', 'posts', $requestData);
-        $result = json_decode($result, true);
-        if (isset($result['error']) && $this->isVariableValid($result['error']['message'])) {
+
+        $apiResult = $this->callAPI('GET', 'posts', $requestData);
+        $apiResult = json_decode($apiResult, true);
+        
+        if (isset($apiResult['error']) && $this->isVariableValid($apiResult['error']['message'])) {
             $response['status'] = false;
-            $response['error'] = $result['error']['message'];
+            $response['error'] = $apiResult['error']['message'];
             return $response;
         }
-        $response['data'] = $result;
-        $response['data'] = $response['data']['data'];
+        $response = $apiResult;
         $this->data['posts'] = $response['data']['posts'];
         $this->data['page'] = $response['data']['page'];
         return $response;
