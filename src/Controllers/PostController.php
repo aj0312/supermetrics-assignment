@@ -20,7 +20,6 @@ class PostController
 
         $this->slToken = null;
         $this->request = $_REQUEST;
-        $this->clientId = getenv('CLIENT_ID');
     }
 
     public function processRequest()
